@@ -51,12 +51,13 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        return next();
+        // return next();
+        return;
     }
     this.password = await bcrypt.hash(this.password, 10)
-    next();
+    // next(); // Mongoose 8 (or newer versions), async middleware should not use next()
 })
 
 //custom method to check password
